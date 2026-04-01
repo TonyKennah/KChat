@@ -115,10 +115,12 @@
 
 .input-area {
   display: flex;
+  height: 40px;
   gap: 10px;
 }
 
 .input-area input {
+  font-size: 15px;
   flex: 1;
 }
 
