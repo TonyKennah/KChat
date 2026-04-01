@@ -11,7 +11,7 @@ function App() {
 
   useEffect(() => {
     // Initialize WebSocket connection to the Ktor backend
-    const ws = new WebSocket('ws://localhost:8080/chat');
+    const ws = new WebSocket('ws://192.168.0.25:8080/chat');
     socket.current = ws;
 
     ws.onmessage = (event) => {
@@ -49,26 +49,37 @@ function App() {
   };
 
   return (
-    <div className="app-layout" style={{ display: 'flex', gap: '20px', padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <div className="chat-container" style={{ flex: 3 }}>
+    <div className="app-layout">
+      <div className="chat-container">
         <h2>Chatting as: {username}</h2>
-        <div className="message-list" style={{ border: '1px solid #ccc', height: '400px', overflowY: 'auto', marginBottom: '10px', padding: '10px' }}>
-          {messages.map((msg, index) => (
-            <div key={index}>{msg}</div>
-          ))}
+        <div className="message-list">
+          {messages.map((msg, index) => {
+            const separatorIndex = msg.indexOf(': ');
+            if (separatorIndex !== -1) {
+              const sender = msg.substring(0, separatorIndex);
+              const text = msg.substring(separatorIndex + 2);
+              return (
+                <div key={index} className="message-item">
+                  <strong className={`message-sender ${sender === username ? 'is-me' : ''}`}>{sender}</strong>
+                  <span className="message-text">{text}</span>
+                </div>
+              );
+            }
+            return <div key={index} className="system-message">{msg}</div>;
+          })}
           <div ref={messagesEndRef} />
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <input type="text" style={{ flex: 1 }} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder="Type a message..." />
+        <div className="input-area">
+          <input type="text" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSend()} placeholder="Type a message..." />
           <button onClick={handleSend}>Send</button>
         </div>
       </div>
       
-      <div className="user-sidebar" style={{ flex: 1, borderLeft: '1px solid #eee', paddingLeft: '20px' }}>
+      <div className="user-sidebar">
         <h3>Active Users</h3>
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+        <ul>
           {users.map((user, index) => (
-            <li key={index} style={{ padding: '5px 0', color: user === username ? '#00d8ff' : 'inherit' }}>
+            <li key={index} className={`user-item ${user === username ? 'is-me' : ''}`}>
               {user} {user === username && '(You)'}
             </li>
           ))}

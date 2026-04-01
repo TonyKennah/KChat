@@ -1,1 +1,87 @@
+.app-layout {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  align-items: stretch;
+}
 
+.chat-container {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-container h2 {
+  text-align: left;
+}
+
+.message-list {
+  border: 1px solid #000000;
+  height: 400px;
+  width: 600px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  padding: 10px;
+  text-align: left;
+  background-color: #000000;
+}
+
+.message-item {
+  margin-bottom: 8px;
+  display: block;
+  width: 100%;
+}
+
+.message-sender {
+  color: #555;
+}
+
+.message-sender.is-me {
+  color: #00d8ff;
+}
+
+.message-text {
+  margin-left: 12px;
+  color: #ffffff;
+}
+
+.system-message {
+  margin-bottom: 8px;
+  color: #888;
+  font-style: italic;
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
+}
+
+.input-area input {
+  flex: 1;
+}
+
+.user-sidebar {
+  flex: 1;
+  border-left: 1px solid #eee;
+  padding-left: 20px;
+  text-align: left;
+}
+
+.user-sidebar h3 {
+  margin-top: 0;
+}
+
+.user-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.user-item {
+  padding: 5px 0;
+}
+
+.user-item.is-me {
+  color: #00d8ff;
+}
