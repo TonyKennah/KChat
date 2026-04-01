@@ -5,11 +5,14 @@ function App() {
   const [messages, setMessages] = useState<string[]>([]);
   const [input, setInput] = useState('');
   const [users, setUsers] = useState<string[]>([]);
-  const [username] = useState(() => 'User' + Math.floor(Math.random() * 1000));
+  const [username, setUsername] = useState('');
+  const [joined, setJoined] = useState(false);
   const socket = useRef<WebSocket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!joined) return;
+
     // Initialize WebSocket connection to the Ktor backend
     const ws = new WebSocket('ws://192.168.0.25:8080/chat');
     socket.current = ws;
@@ -33,7 +36,7 @@ function App() {
     return () => {
       ws.close();
     };
-  }, []);
+  }, [joined]);
 
   // Automatically scroll to bottom when messages change
   useEffect(() => {
@@ -47,6 +50,28 @@ function App() {
       setInput('');
     }
   };
+
+  const handleJoin = () => {
+    if (username.trim()) {
+      setJoined(true);
+    }
+  };
+
+  if (!joined) {
+    return (
+      <div className="login-screen">
+        <div className="login-card">
+          <h1>Welcome to KChat</h1>
+          <p>Choose a username to start chatting</p>
+          <div className="login-form">
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} 
+              onKeyDown={(e) => e.key === 'Enter' && handleJoin()} placeholder="Enter username..." autoFocus />
+            <button onClick={handleJoin} disabled={!username.trim()}>Join Chat</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="app-layout">
